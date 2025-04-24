@@ -32,4 +32,9 @@ class Event extends Model
   {
     return $this->hasMany(Event::class, 'parent_id');
   }
+
+  public function registrations()
+  {
+    return $this->hasMany(EventRegistration::class);
+  }
 }
