@@ -19,13 +19,13 @@ Route::middleware('auth:api')->group(function () {
     Route::post('refresh', [AuthController::class, 'refresh']);
 
     Route::prefix('events')->group(function () {
-        Route::get('my-registrations', [EventController::class, 'myRegistrations']); // Minhas inscrições (primeira rota)
-        Route::get('/', [EventController::class, 'index']); // Listar eventos
-        Route::get('{event}', [EventController::class, 'show']); // Detalhar evento
-        Route::post('{event}/register', [EventController::class, 'register']); // Inscrever em evento
+        Route::get('my-registrations', [EventController::class, 'myRegistrations']);
+        Route::get('/', [EventController::class, 'index']);
+        Route::get('{event}', [EventController::class, 'show']);
+        Route::post('{event}/register', [EventController::class, 'register']);
     });
 
     Route::prefix('event-registrations')->group(function () {
-        Route::post('{registration}/cancel', [EventController::class, 'cancelRegistration']); // Cancelar inscrição
+        Route::post('{registration}/cancel', [EventController::class, 'cancelRegistration']);
     });
 });
