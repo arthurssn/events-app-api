@@ -46,9 +46,9 @@ class EventController extends Controller
   public function myRegistrations()
   {
     try {
-      $registrations = auth()->user()->eventRegistrations()->with('event')->get();
+      $registrations = auth()->user()->eventRegistrations()->with('event')->where('canceled_at', null)->with('event')->get();
 
-      return $this->success($registrations, 'Eventos cadastrados com sucesso.');
+      return $this->success($registrations, 'Eventos carregados com sucesso.');
     } catch (\Throwable $th) {
       return $this->error($th->getMessage());
     }

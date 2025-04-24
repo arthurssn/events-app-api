@@ -50,16 +50,18 @@ class Event extends Model
       throw new \Exception('Não há vagas disponíveis para esse evento.', 409);
     }
 
-    if (EventRegistration::where('user_id', $user->id)->where('event_id', $this->id)->exists()) {
+    if (EventRegistration::active()->where('user_id', $user->id)->where('event_id', $this->id)->exists()) {
       throw new \Exception('Você já está inscrito neste evento.', 409);
     }
 
     $qrCode = Str::uuid();
 
-    $registration = EventRegistration::create([
+    $registration = EventRegistration::updateOrCreate([
       'user_id' => $user->id,
       'event_id' => $this->id,
+    ], [
       'qr_code' => $qrCode,
+      'canceled_at' => null
     ]);
 
     $this->decrement('available_slots');

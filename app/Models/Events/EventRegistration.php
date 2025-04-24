@@ -45,4 +45,15 @@ class EventRegistration extends Model
     $this->update(['canceled_at' => now()]);
     $this->event->increment('available_slots');
   }
+
+  /**
+   * Scope para verificar se o registro não foi cancelado.
+   *
+   * @param \Illuminate\Database\Eloquent\Builder $query
+   * @return \Illuminate\Database\Eloquent\Builder
+   */
+  public function scopeActive($query)
+  {
+    return $query->whereNull('canceled_at');
+  }
 }
