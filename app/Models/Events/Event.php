@@ -2,7 +2,9 @@
 
 namespace App\Models\Events;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Str;
 
 class Event extends Model
 {
@@ -36,5 +38,34 @@ class Event extends Model
   public function registrations()
   {
     return $this->hasMany(EventRegistration::class);
+  }
+
+  public function registerToEvent(User $user)
+  {
+    if ($this->parent_id === null) {
+      throw new \Exception('Só é possível se inscrever em tarefas (eventos filhos).', 422);
+    }
+
+    if ($this->available_slots <= 0) {
+      throw new \Exception('Não há vagas disponíveis para esse evento.', 409);
+    }
+
+    if (EventRegistration::active()->where('user_id', $user->id)->where('event_id', $this->id)->exists()) {
+      throw new \Exception('Você já está inscrito neste evento.', 409);
+    }
+
+    $qrCode = Str::uuid();
+
+    $registration = EventRegistration::updateOrCreate([
+      'user_id' => $user->id,
+      'event_id' => $this->id,
+    ], [
+      'qr_code' => $qrCode,
+      'canceled_at' => null
+    ]);
+
+    $this->decrement('available_slots');
+
+    return $registration;
   }
 }
