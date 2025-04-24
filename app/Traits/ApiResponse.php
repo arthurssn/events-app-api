@@ -31,7 +31,7 @@ trait ApiResponse
    * @param mixed $errors Erros adicionais (pode ser um array ou string).
    * @return JsonResponse
    */
-  public function error(string $message, int $status = 400, $errors = null): JsonResponse
+  public function error(string $message = 'An error occurred', int $status = 500, $errors = null): JsonResponse
   {
     return response()->json([
       'success' => false,
