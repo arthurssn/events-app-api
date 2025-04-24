@@ -16,4 +16,7 @@ Route::middleware('auth:api')->group(function () {
     Route::get('me', [AuthController::class, 'me']);
     Route::post('logout', [AuthController::class, 'logout']);
     Route::post('refresh', [AuthController::class, 'refresh']);
+
+    Route::get('events', [App\Http\Controllers\Api\Events\EventController::class, 'index']);
+    Route::get('events/{event}', [App\Http\Controllers\Api\Events\EventController::class, 'show']);
 });
