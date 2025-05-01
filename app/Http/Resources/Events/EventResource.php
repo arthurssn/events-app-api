@@ -16,6 +16,9 @@ class EventResource extends JsonResource
       'end_at' => $this->end_at,
       'available_slots' => $this->available_slots,
       'aacc_hours' => $this->aacc_hours,
+      'location' => $this->location,
+      'photo' => $this->photo,
+      'parent' => new EventResource($this->whenLoaded('parent')),
       'children' => EventResource::collection($this->whenLoaded('children'))
     ];
   }

@@ -15,7 +15,9 @@ class Event extends Model
     'start_at',
     'end_at',
     'aacc_hours',
-    'parent_id'
+    'parent_id',
+    'photo',
+    'location'
   ];
 
   protected $casts = [
@@ -67,5 +69,10 @@ class Event extends Model
     $this->decrement('available_slots');
 
     return $registration;
+  }
+
+  public function duration()
+  {
+    return $this->start_at->diffInMinutes($this->end_at);
   }
 }

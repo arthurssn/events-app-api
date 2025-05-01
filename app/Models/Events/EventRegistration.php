@@ -56,4 +56,9 @@ class EventRegistration extends Model
   {
     return $query->whereNull('canceled_at');
   }
+
+  public function scopeOwnedBy($query, $userId)
+  {
+    return $query->where('user_id', $userId);
+  }
 }

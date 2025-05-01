@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers\Api\Events;
 
-use App\Actions\Events\CancelRegisterEventAction;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\Events\EventResource;
 use App\Models\Events\Event;
@@ -37,7 +36,7 @@ class EventController extends Controller
   {
     try {
       $event->registerToEvent(auth()->user());
-      return $this->success(true, 'Inscricao realizada com sucesso');
+      return $this->success(true, 'Inscrição realizada com sucesso');
     } catch (\Throwable $th) {
       return $this->error($th->getMessage());
     }
@@ -46,7 +45,12 @@ class EventController extends Controller
   public function myRegistrations()
   {
     try {
-      $registrations = auth()->user()->eventRegistrations()->with('event')->where('canceled_at', null)->with('event')->get();
+      $registrations = auth()->user()
+        ->eventRegistrations()
+        ->whereNull('canceled_at')
+        ->with('event')
+        ->get();
+
 
       return $this->success($registrations, 'Eventos carregados com sucesso.');
     } catch (\Throwable $th) {
@@ -57,7 +61,9 @@ class EventController extends Controller
   public function cancelRegistration(int $id)
   {
     try {
-      $eventRegistration = EventRegistration::findOrFail($id);
+      $eventRegistration = EventRegistration::ownedBy(auth()->id())
+        ->findOrFail($id);
+
       $eventRegistration->cancelRegistration();
 
       return $this->success(null, 'Inscrição cancelada com sucesso.');
